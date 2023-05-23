@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>A Hugo website</title>
+    <link>/</link>
+    <description>Recent content on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About</title>
+      <link>/about/</link>
+      <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
+      
+      <guid>/about/</guid>
+      <description>2023: Semester 1 Course outline:
+here-ASP 460 2.0
+here-STA 492 2.0
+Here&amp;rsquo;s your roadmap for the semester! Class materials will be added on the day of the class.
+📊 Week 1: Introduction to data visualization: Visualisation design process</description>
+    </item>
+    
+  </channel>
+</rss>
