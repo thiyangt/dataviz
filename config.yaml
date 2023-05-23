@@ -1,4 +1,4 @@
-baseurl: /
+baseurl: https://thiyanga-dataviz.netlify.app/about/
 languageCode: en-us
 title: A Hugo website
 theme: hugo-lithium

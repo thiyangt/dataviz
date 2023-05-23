@@ -7,7 +7,7 @@ title: About
 
 Course outline: 
 
-[here-ASP 460 2.0](/CO/ASP_460_20_DataVisualisation_2023.pdf)
+[here-ASP 460 2.0](/CO/ASP_460_2.0_DataVisualisation_2023.pdf)
 
 [here-STA 492 2.0](/CO/STA_492_2.0_DataVisualisation.pdf)
 

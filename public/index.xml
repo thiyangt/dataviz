@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>A Hugo website</title>
-    <link>/</link>
+    <link>https://thiyanga-dataviz.netlify.app/about/</link>
     <description>Recent content on A Hugo website</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://thiyanga-dataviz.netlify.app/about/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>About</title>
-      <link>/about/</link>
+      <link>https://thiyanga-dataviz.netlify.app/about/about/</link>
       <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
       
-      <guid>/about/</guid>
+      <guid>https://thiyanga-dataviz.netlify.app/about/about/</guid>
       <description>2023: Semester 1 Course outline:
 here-ASP 460 2.0
 here-STA 492 2.0

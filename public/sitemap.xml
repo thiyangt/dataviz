@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/about/</loc>
+    <loc>https://thiyanga-dataviz.netlify.app/about/about/</loc>
     <lastmod>2016-05-05T21:48:51-07:00</lastmod>
   </url><url>
-    <loc>/</loc>
+    <loc>https://thiyanga-dataviz.netlify.app/about/</loc>
   </url><url>
-    <loc>/categories/</loc>
+    <loc>https://thiyanga-dataviz.netlify.app/about/categories/</loc>
   </url><url>
-    <loc>/tags/</loc>
+    <loc>https://thiyanga-dataviz.netlify.app/about/tags/</loc>
   </url>
 </urlset>
