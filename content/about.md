@@ -31,3 +31,6 @@ Here's your roadmap for the semester! Class materials will be added on the day o
  [Best Practices](https://tstdataviz.netlify.app/slides/lesson4viz2021.html#1)
  
  [Grammar of graphics](https://tstdataviz.netlify.app/slides/lesson3viz2021.html#1) 
+ 
+ 
+[*](/rscript/1_toothgrowth.R)
