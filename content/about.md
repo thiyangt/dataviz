@@ -26,11 +26,20 @@ Here's your roadmap for the semester! Class materials will be added on the day o
  
  [Introduction to data visualization: Visualisation design process](/slides/lesson1viz2023.html) 
 
- 📊 Week 4: 13 June 2023
+ 📊 Week 4: 13 June 2023: Level up your plots
  
- [Best Practices](https://tstdataviz.netlify.app/slides/lesson4viz2021.html#1)
  
  [Grammar of graphics](https://tstdataviz.netlify.app/slides/lesson3viz2021.html#1) 
  
+ Exercise: Level up your plots 
  
-[*](/rscript/1_toothgrowth.R)
+ Dataset: `ToothGrowth`
+ 
+📊 Week 5: 20 June 2023: Visualizing qualitative data
+
+[Qualitative data visualisation](https://tstdataviz.netlify.app/slides/data_visualization_2022)
+
+
+[Visualising distributions of data ](https://tstdataviz.netlify.app/slides/dis22.html#22)
+ 
+[****](/rscript/1_toothgrowth.R)[*****-1](https://github.com/thiyangt/dataviz/blob/master/static/slides/Data_visualization_2022.Rmd) [*****-2](https://github.com/thiyangt/dataviz/blob/master/static/slides/dis22.Rmd)
