@@ -39,6 +39,8 @@ Here's your roadmap for the semester! Class materials will be added on the day o
 
 [Qualitative data visualisation](https://tstdataviz.netlify.app/slides/data_visualization_2022)
 
+ 
+📊 Week 5: 27 June 2023: Visualizing distributions of data
 
 [Visualising distributions of data ](https://tstdataviz.netlify.app/slides/dis22.html#22)
  
