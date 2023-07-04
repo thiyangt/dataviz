@@ -43,5 +43,11 @@ Here's your roadmap for the semester! Class materials will be added on the day o
 📊 Week 5: 27 June 2023: Visualizing distributions of data
 
 [Visualising distributions of data ](https://tstdataviz.netlify.app/slides/dis22.html#22)
+
+📊 Week 6: 04 July 2023: Colour scales and coordinate systems with ggplot
+
+[Coordinate systems and axes](https://tstdataviz.netlify.app/slides/lesson5viz2021.html#1)
+
+[Colour scales](https://tstdataviz.netlify.app/slides/lesson6viz2021.html#1)
  
 [****](/rscript/1_toothgrowth.R)[*****-1](https://github.com/thiyangt/dataviz/blob/master/static/slides/Data_visualization_2022.Rmd) [*****-2](https://github.com/thiyangt/dataviz/blob/master/static/slides/dis22.Rmd)
