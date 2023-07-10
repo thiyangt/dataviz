@@ -645,16 +645,26 @@ date_labels = "%b")
 
 ---
 
-Label | Description
+.pull-left[
+|Label | Description|
+|---|---|
+|`S%` | second (00-59)|
+|||
 
----:|---
 
-`S%` | second (00-59)
+]
 
+.pull-right[
+
+|Label | Description|
+|---|---|
+| | |
+
+]
 ---
 class: middle,inverse, center
 
-Your turn: Modify the chart as follows
+## Your turn: Modify the chart as follows
 
 ```{r, message=FALSE, warning=FALSE, fig.width=15, echo=FALSE}
 base + geom_point() +  scale_x_date(date_breaks = "1 month", date_minor_breaks = "1 week",
