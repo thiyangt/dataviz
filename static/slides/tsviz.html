@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Visualizing Time Series Data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr Thiyanga Talagala" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
+    <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/cc-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="libs/figure-captions.css" type="text/css" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Visualizing Time Series Data
+]
+.author[
+### Dr Thiyanga Talagala
+]
+
+---
+
+
+
+
+
+
+### R packages need for time series visualization
+
+
+```r
+library(tsibble)
+library(lubridate)
+library(tidyverse)
+```
+
+---
+# Data package
+
+
+```r
+# install.packages("devtools")
+#devtools::install_github("thiyangt/denguedatahub")
+library(denguedatahub)
+```
+
+More information: https://denguedatahub.netlify.app/
+---
+
+# Data sets in `denguedatahub`
+
+
+```r
+vcdExtra::datasets("denguedatahub")
+```
+
+```
+##                       Item      class        dim
+## 1     americas_annual_data data.frame   899134x5
+## 2 cdc_usa_dengue_infection data.frame     9039x6
+## 3        china_annual_data data.frame       16x5
+## 4        india_annual_data data.frame      432x5
+## 5            level_of_risk data.frame      138x3
+## 6   philippines_daily_data data.frame    32701x5
+## 7    singapore_weekly_data data.frame      272x3
+## 8     srilanka_weekly_data data.frame    21934x6
+## 9             world_annual data.frame 2773284x10
+##                                                                      Title
+## 1 Dengue and severe dengue cases and deaths for subregions of the Americas
+## 2                      Annual number of dengue fever infections in the USA
+## 3                                             Dengue related data in china
+## 4                                 DENGUE/DHF situation in India since 2017
+## 5                                    Level of Dengue risk around the world
+## 6                   Daily number of dengue fever infections in Philippines
+## 7                    Weekly number of dengue fever infections in Sri Lanka
+## 8                    Weekly number of dengue fever infections in Sri Lanka
+## 9                Annual number of dengue fever infections around the world
+```
+
+---
+class: inverse, center, middle
+
+# Univariate Time Series Visualization
+
+---
+# `srilanka_weekly_data`
+
+
+```r
+srilanka_weekly_data
+```
+
+```
+## # A tibble: 21,934 × 6
+##     year  week start.date end.date   district    cases
+##  * &lt;dbl&gt; &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;       &lt;dbl&gt;
+##  1  2006    52 2006-12-23 2006-12-29 Colombo        71
+##  2  2006    52 2006-12-23 2006-12-29 Gampaha        12
+##  3  2006    52 2006-12-23 2006-12-29 Kalutara       12
+##  4  2006    52 2006-12-23 2006-12-29 Kandy          20
+##  5  2006    52 2006-12-23 2006-12-29 Matale          4
+##  6  2006    52 2006-12-23 2006-12-29 NuwaraEliya     1
+##  7  2006    52 2006-12-23 2006-12-29 Galle           1
+##  8  2006    52 2006-12-23 2006-12-29 Hambanthota     1
+##  9  2006    52 2006-12-23 2006-12-29 Matara         11
+## 10  2006    52 2006-12-23 2006-12-29 Jaffna          0
+## # ℹ 21,924 more rows
+```
+
+---
+
+# Filter Colombo data
+
+
+```r
+colombodf &lt;- srilanka_weekly_data |&gt;
+  filter(district == "Colombo")
+colombodf
+```
+
+```
+## # A tibble: 844 × 6
+##     year  week start.date end.date   district cases
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt;
+##  1  2006    52 2006-12-23 2006-12-29 Colombo     71
+##  2  2007     1 2006-12-30 2007-01-05 Colombo     40
+##  3  2007     2 2007-01-06 2007-01-12 Colombo     43
+##  4  2007     3 2007-01-13 2007-01-19 Colombo     38
+##  5  2007     4 2007-01-20 2007-01-26 Colombo     52
+##  6  2007     5 2007-01-27 2007-02-02 Colombo     69
+##  7  2007     6 2007-02-03 2007-02-09 Colombo     36
+##  8  2007     7 2007-02-10 2007-02-16 Colombo     42
+##  9  2007     8 2007-02-17 2007-02-23 Colombo     28
+## 10  2007     9 2007-02-24 2007-03-02 Colombo     20
+## # ℹ 834 more rows
+```
+
+---
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_point()
+```
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_point()
+```
+
+
+What limitations or shortcomings do you observe in its current presentation?
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_point()
+```
+
+How can the graph be further improved?
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+
+
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_point()
+```
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line()
+```
+
+We can connect neighbouring points with lines to emphasise the time dependent relationship.
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+
+
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line()
+```
+
+- Lines do not represent actual data. 
+
+- Lines are used to guide the eye.
+
+- It is not appropriate to connect points with lines if the observed values are far apart or unevenly distributed.
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() + 
+  geom_point()
+```
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+]
+
+
+---
+
+** Which is the best option? `Lines only` or `Points and Lines both`**
+
+.pull-left[
+![](tsviz_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+
+]
+---
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_area() 
+```
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_area() 
+```
+
+- Distinguishes the area above and below the curve visually.
+
+-  More focus is given to the overarching trend in the series.  
+
+- This visualisation works only if the y-axis is set to zero.
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line()
+```
+
+How can the graph be further improved?
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line()
+```
+
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+*  scale_x_date(date_breaks = "1 year")
+```
+
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+  scale_x_date(date_breaks = "1 year") +
+*  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+*  scale_x_date(date_breaks = "1 month") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+*  scale_x_date(date_breaks = "1 year") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+*  scale_x_date(date_breaks = "1 year") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+*  scale_x_date(date_breaks = "1 year",  date_labels = "%b-%y") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + xlab("Time") + ylab("Dengue Cases")
+```
+
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+
+]
+
+
+---
+
+## start.data vs cases
+
+.pull-left[
+
+```r
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+*  scale_x_date(date_breaks = "1 year", date_labels = "%Y-%m-%d") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + xlab("Time") + ylab("Dengue Cases")
+```
+
+
+
+]
+
+.pull-right[
+![](tsviz_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+![](tsviz_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+
+--
+
+What are the key takeaways from this chart?
+
+---
+class: inverse, middle, center
+
+# Formatting time axis
+
+---
+
+# Filter 2019 data for Colombo district
+
+
+```r
+colombo2019 &lt;-  srilanka_weekly_data |&gt;
+  filter(district == "Colombo", year==2019)
+colombo2019
+```
+
+```
+## # A tibble: 52 × 6
+##     year  week start.date end.date   district cases
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;     &lt;chr&gt;    &lt;dbl&gt;
+##  1  2019     1 2018-12-29 2019-01-04 Colombo    299
+##  2  2019     2 2019-01-05 2019-01-11 Colombo    326
+##  3  2019     3 2019-01-12 2019-01-18 Colombo    259
+##  4  2019     4 2019-01-19 2019-01-25 Colombo    341
+##  5  2019     5 2019-01-26 2019-02-01 Colombo    232
+##  6  2019     6 2019-02-02 2019-02-08 Colombo    201
+##  7  2019     7 2019-02-09 2019-02-15 Colombo    215
+##  8  2019     8 2019-02-16 2019-02-22 Colombo    144
+##  9  2019     9 2019-02-23 2019-03-01 Colombo    153
+## 10  2019    10 2019-03-02 2019-03-08 Colombo    170
+## # ℹ 42 more rows
+```
+
+---
+class: middle, centre, inverse
+
+# Your turn: Obtain the following chart
+
+![](tsviz_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
+
+---
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

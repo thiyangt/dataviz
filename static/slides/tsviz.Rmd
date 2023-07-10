@@ -1,0 +1,590 @@
+---
+title: "Visualizing Time Series Data"
+author: "Dr Thiyanga Talagala"
+date: ""
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+      - xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#081d58",
+  text_bold_color = "#ce1256",
+  title_slide_text_color = "#edf8b1",
+  header_font_google = google_font("Josefin Sans"),
+  base_font_size = "20px",
+  text_font_size = "1.5rem"
+ #text_font_google   = google_font("Montserrat", "300", "300i")
+ # code_font_google   = google_font("Fira Mono")
+)
+```
+
+
+### R packages need for time series visualization
+
+```{r, message=FALSE, warning=FALSE}
+library(tsibble)
+library(lubridate)
+library(tidyverse)
+```
+
+---
+# Data package
+
+```{r}
+# install.packages("devtools")
+#devtools::install_github("thiyangt/denguedatahub")
+library(denguedatahub)
+```
+
+More information: https://denguedatahub.netlify.app/
+---
+
+# Data sets in `denguedatahub`
+
+```{r}
+vcdExtra::datasets("denguedatahub")
+```
+
+---
+class: inverse, center, middle
+
+# Univariate Time Series Visualization
+
+---
+# `srilanka_weekly_data`
+
+```{r}
+srilanka_weekly_data
+```
+
+---
+
+# Filter Colombo data
+
+```{r}
+colombodf <- srilanka_weekly_data |>
+  filter(district == "Colombo")
+colombodf
+```
+
+---
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_point()
+```
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(data=colombodf, aes(x=start.date, y=cases))+geom_point()
+```
+
+]
+
+---
+
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_point()
+```
+
+
+What limitations or shortcomings do you observe in its current presentation?
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(data=colombodf, aes(x=start.date, y=cases))+geom_point()
+```
+
+]
+
+---
+
+
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_point()
+```
+
+How can the graph be further improved?
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(data=colombodf, aes(x=start.date, y=cases))+geom_point()
+```
+
+]
+
+---
+
+
+
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_point()
+```
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE, fig.width=10}
+ggplot(data=colombodf, aes(x=start.date, y=cases))+geom_point()
+```
+
+]
+
+---
+
+
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line()
+```
+
+We can connect neighbouring points with lines to emphasise the time dependent relationship.
+
+]
+
+.pull-right[
+```{r, echo=FALSE, fig.width=10}
+ggplot(data=colombodf, aes(x=start.date, y=cases))+geom_line()
+```
+
+]
+
+---
+
+
+
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line()
+```
+
+- Lines do not represent actual data. 
+
+- Lines are used to guide the eye.
+
+- It is not appropriate to connect points with lines if the observed values are far apart or unevenly distributed.
+
+]
+
+.pull-right[
+```{r, echo=FALSE, fig.width=10}
+ggplot(data=colombodf, aes(x=start.date, y=cases))+geom_line()
+```
+
+]
+
+---
+
+
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() + 
+  geom_point()
+```
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE, fig.width=10}
+ggplot(data=colombodf, aes(x=start.date, y=cases)) + 
+  geom_line() + 
+  geom_point()
+```
+
+]
+
+
+---
+
+** Which is the best option? `Lines only` or `Points and Lines both`**
+
+.pull-left[
+```{r, echo=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() 
+```
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(data=colombodf, aes(x=start.date, y=cases)) + 
+  geom_line() + 
+  geom_point()
+```
+
+]
+---
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_area() 
+```
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE, fig.width=10}
+ggplot(data=colombodf, aes(x=start.date, y=cases)) + 
+  geom_area() 
+```
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_area() 
+```
+
+- Distinguishes the area above and below the curve visually.
+
+-  More focus is given to the overarching trend in the series.  
+
+- This visualisation works only if the y-axis is set to zero.
+
+]
+
+.pull-right[
+```{r, echo=FALSE, fig.width=10}
+ggplot(data=colombodf, aes(x=start.date, y=cases)) + 
+  geom_area() 
+```
+
+]
+
+---
+
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line()
+```
+
+How can the graph be further improved?
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(data=colombodf, aes(x=start.date, y=cases))+geom_line()
+```
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line()
+```
+
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(data=colombodf, aes(x=start.date, y=cases))+geom_line()
+```
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+*  scale_x_date(date_breaks = "1 year")
+```
+
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(data=colombodf, aes(x=start.date, y=cases)) + geom_line() +  scale_x_date(date_breaks = "1 year")
+```
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+  scale_x_date(date_breaks = "1 year") +
+*  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(data=colombodf, aes(x=start.date, y=cases)) + geom_line() +  scale_x_date(date_breaks = "1 year") + 
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+*  scale_x_date(date_breaks = "1 month") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(data=colombodf, aes(x=start.date, y=cases)) + geom_line() +  scale_x_date(date_breaks = "1 month") + 
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+*  scale_x_date(date_breaks = "1 year") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(data=colombodf, aes(x=start.date, y=cases)) + geom_line() +  scale_x_date(date_breaks = "1 year") + 
+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+]
+
+---
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+*  scale_x_date(date_breaks = "1 year") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(data=colombodf, aes(x=start.date, y=cases)) + geom_line() +  scale_x_date(date_breaks = "1 year",
+                                                                                 date_labels = "%b-%y") + 
+theme(axis.text.x = element_text(angle = 90, 
+                                 vjust = 0.5, hjust=1))
+```
+
+]
+
+---
+
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+*  scale_x_date(date_breaks = "1 year",  date_labels = "%b-%y") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + xlab("Time") + ylab("Dengue Cases")
+```
+
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(data=colombodf, aes(x=start.date, y=cases)) + geom_line() +  scale_x_date(date_breaks = "1 year",
+                                                                                 date_labels = "%b-%y") + 
+theme(axis.text.x = element_text(angle = 90, 
+                                 vjust = 0.5, hjust=1)) + xlab("Time") + ylab("Dengue Cases")
+```
+
+]
+
+
+---
+
+## start.data vs cases
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(data=colombodf, 
+       aes(x=start.date, y=cases)) +
+  geom_line() +
+*  scale_x_date(date_breaks = "1 year", date_labels = "%Y-%m-%d") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + xlab("Time") + ylab("Dengue Cases")
+```
+
+
+
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(data=colombodf, aes(x=start.date, y=cases)) + geom_line() +  scale_x_date(date_breaks = "1 year",
+                                                                                 date_labels = "%Y-%m-%d") + 
+theme(axis.text.x = element_text(angle = 90, 
+                                 vjust = 0.5, hjust=1)) + xlab("Time") + ylab("Dengue Cases")
+```
+
+]
+
+---
+
+```{r, echo=FALSE, fig.width=15}
+ggplot(data=colombodf, aes(x=start.date, y=cases)) + geom_line() +  scale_x_date(date_breaks = "1 year",
+                                                                                 date_labels = "%Y-%m-%d") + 
+theme(axis.text.x = element_text(angle = 90, 
+                                 vjust = 0.5, hjust=1)) + xlab("Time") + ylab("Dengue Cases")
+```
+
+--
+
+What are the key takeaways from this chart?
+
+---
+class: inverse, middle, center
+
+# Formatting time axis
+
+---
+
+# Filter 2019 data for Colombo district
+
+```{r}
+colombo2019 <-  srilanka_weekly_data |>
+  filter(district == "Colombo", year==2019)
+colombo2019
+```
+
+---
+class: middle, centre, inverse
+
+# Your turn: Obtain the following chart
+
+```{r, echo=FALSE, fig.width=15}
+base <- ggplot(data=colombo2019,
+               aes(x=start.date, y=cases)) + geom_line() + scale_x_date(date_breaks = "1 month") + 
+   theme(axis.text.x = element_text(angle = 90,  vjust = 0.5, hjust=1)) +  xlab("Month") + ylab("Dengue Cases") 
+base
+```
+
+---
+
+```{r}
+
+```
+
+
