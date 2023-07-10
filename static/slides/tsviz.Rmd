@@ -627,8 +627,7 @@ base + geom_point() +  scale_x_date(date_breaks = "1 month")
 
 .pull-right[
 ```{r, message=FALSE, warning=FALSE}
-base + geom_point() +  scale_x_date(date_breaks = "1 month",
-  date_minor_breaks = "1 week")
+base + geom_point() +  scale_x_date(date_breaks = "1 month", date_minor_breaks = "1 week")
 ```
 ]
 
@@ -639,10 +638,25 @@ class:  middle, center
 
 ---
 
-```{r, message=FALSE, warning=FALSE}
-base + geom_point() +  scale_x_date(date_breaks = "1 month",                        date_minor_breaks = "1 week", date_labels = "%b")
+```{r, message=FALSE, warning=FALSE, fig.width=15}
+base + geom_point() +  scale_x_date(date_breaks = "1 month", date_minor_breaks = "1 week",
+date_labels = "%b")
 ```
 
 ---
 
+Label | Description
 
+---:|---
+
+`S%` | second (00-59)
+
+---
+class: middle,inverse, center
+
+Your turn: Modify the chart as follows
+
+```{r, message=FALSE, warning=FALSE, fig.width=15, echo=FALSE}
+base + geom_point() +  scale_x_date(date_breaks = "1 month", date_minor_breaks = "1 week",
+date_labels = "%B")
+```

@@ -665,8 +665,7 @@ base + geom_point() +  scale_x_date(date_breaks = "1 month")
 .pull-right[
 
 ```r
-base + geom_point() +  scale_x_date(date_breaks = "1 month",
-  date_minor_breaks = "1 week")
+base + geom_point() +  scale_x_date(date_breaks = "1 month", date_minor_breaks = "1 week")
 ```
 
 ![](tsviz_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
@@ -681,14 +680,26 @@ class:  middle, center
 
 
 ```r
-base + geom_point() +  scale_x_date(date_breaks = "1 month",                        date_minor_breaks = "1 week", date_labels = "%b")
+base + geom_point() +  scale_x_date(date_breaks = "1 month", date_minor_breaks = "1 week",
+date_labels = "%b")
 ```
 
 ![](tsviz_files/figure-html/unnamed-chunk-52-1.png)&lt;!-- --&gt;
 
 ---
 
+Label | Description
 
+---:|---
+
+`S%` | second (00-59)
+
+---
+class: middle,inverse, center
+
+Your turn: Modify the chart as follows
+
+![](tsviz_files/figure-html/unnamed-chunk-53-1.png)&lt;!-- --&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
