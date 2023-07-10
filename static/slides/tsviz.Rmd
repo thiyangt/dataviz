@@ -582,9 +582,22 @@ base
 ```
 
 ---
-
+.pull-left[
 ```{r}
-
+base
 ```
 
+]
 
+.pull-right[
+
+- How can the plot be improved?
+
+
+]
+
+---
+
+```{r, fig.width=10}
+base + geom_point()
+```
