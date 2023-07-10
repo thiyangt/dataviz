@@ -3,7 +3,7 @@
   <head>
     <title>Visualizing Time Series Data</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Dr Thiyanga Talagala" />
+    <meta name="author" content="Thiyanga S. Talagala" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
@@ -21,7 +21,7 @@ class: center, middle, inverse, title-slide
 # Visualizing Time Series Data
 ]
 .author[
-### Dr Thiyanga Talagala
+### Thiyanga S. Talagala
 ]
 
 ---
@@ -627,6 +627,68 @@ base + geom_point()
 ```
 
 ![](tsviz_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
+
+---
+class: middle, center
+
+# Breaks: `date_breaks`
+
+---
+
+
+```r
+base + geom_point() +  scale_x_date(date_breaks = "2 months")
+```
+
+```
+## Scale for x is already present.
+## Adding another scale for x, which will replace the existing scale.
+```
+
+![](tsviz_files/figure-html/unnamed-chunk-49-1.png)&lt;!-- --&gt;
+
+---
+class: middle,  center
+
+# Minor breaks: `date_minor_breaks`
+---
+
+.pull-left[
+
+```r
+base + geom_point() +  scale_x_date(date_breaks = "1 month")
+```
+
+![](tsviz_files/figure-html/unnamed-chunk-50-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+base + geom_point() +  scale_x_date(date_breaks = "1 month",
+  date_minor_breaks = "1 week")
+```
+
+![](tsviz_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
+]
+
+---
+class:  middle, center
+
+# Labels: `date_labels`
+
+---
+
+
+```r
+base + geom_point() +  scale_x_date(date_breaks = "1 month",                        date_minor_breaks = "1 week", date_labels = "%b")
+```
+
+![](tsviz_files/figure-html/unnamed-chunk-52-1.png)&lt;!-- --&gt;
+
+---
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>

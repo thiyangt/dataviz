@@ -1,6 +1,6 @@
 ---
 title: "Visualizing Time Series Data"
-author: "Dr Thiyanga Talagala"
+author: "Thiyanga S. Talagala"
 date: ""
 output:
   xaringan::moon_reader:
@@ -598,6 +598,51 @@ base
 
 ---
 
-```{r, fig.width=10}
+```{r, fig.width=15}
 base + geom_point()
 ```
+
+---
+class: middle, center
+
+# Breaks: `date_breaks`
+
+---
+
+```{r, fig.width=15}
+base + geom_point() +  scale_x_date(date_breaks = "2 months")
+```
+
+---
+class: middle,  center
+
+# Minor breaks: `date_minor_breaks`
+---
+
+.pull-left[
+```{r, message=FALSE, warning=FALSE}
+base + geom_point() +  scale_x_date(date_breaks = "1 month")
+```
+]
+
+.pull-right[
+```{r, message=FALSE, warning=FALSE}
+base + geom_point() +  scale_x_date(date_breaks = "1 month",
+  date_minor_breaks = "1 week")
+```
+]
+
+---
+class:  middle, center
+
+# Labels: `date_labels`
+
+---
+
+```{r, message=FALSE, warning=FALSE}
+base + geom_point() +  scale_x_date(date_breaks = "1 month",                        date_minor_breaks = "1 week", date_labels = "%b")
+```
+
+---
+
+
