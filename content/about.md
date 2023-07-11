@@ -49,5 +49,9 @@ Here's your roadmap for the semester! Class materials will be added on the day o
 [Coordinate systems and axes](https://tstdataviz.netlify.app/slides/lesson5viz2021.html#1)
 
 [Colour scales](https://tstdataviz.netlify.app/slides/lesson6viz2021.html#1)
+
+📊 Week 7: 11 July 2023: Visualizing time series data
+
+[Visualizing time series data](/slides/tsviz.html)
  
-[****](/rscript/1_toothgrowth.R)[*****-1](https://github.com/thiyangt/dataviz/blob/master/static/slides/Data_visualization_2022.Rmd) [*****-2](https://github.com/thiyangt/dataviz/blob/master/static/slides/dis22.Rmd)
+[****](/rscript/1_toothgrowth.R)[*****-1](https://github.com/thiyangt/dataviz/blob/master/static/slides/Data_visualization_2022.Rmd) [*****-2](https://github.com/thiyangt/dataviz/blob/master/static/slides/dis22.Rmd)[*****-7](/slides/tsviz.Rmd)
