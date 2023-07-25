@@ -86,7 +86,7 @@ p_fs
 prettify(p_fs)
 ```
 
-Your turn:
+Your turn: Level-up the plot
 
 > Plot 4
 
@@ -103,6 +103,8 @@ prettify(p_fs_free)
 
 ```
 
+Your turn: Level-up the plot
+
 > Plot 5
 
 ```{r}
@@ -115,6 +117,50 @@ p_fs_polar <- fs_polar %>%
 prettify(p_fs_polar)
 
 ```
+
+Your turn: Level-up the plot
+
+
+> Plot 6
+
+
+
+```{r}
+pedestrian_dec <- hourly_peds %>% 
+  filter(Month == "December") %>% 
+  frame_calendar(
+    x = Time, y = Hourly_Counts, date = Date, width = 0.97, height = 0.97
+  )
+
+p_boxplot <- pedestrian_dec %>% 
+  ggplot() +
+  geom_boxplot(
+    aes(x = .Time, y = .Hourly_Counts, group = Date_Time),
+    outlier.size = 0.3, width = 0.004, position = "identity",
+    colour = "grey50"
+  )
+
+p_boxplot
+
+prettify(p_boxplot)
+
+```
+
+> Plot 7
+
+```{r}
+
+p_boxplot_2 <- p_boxplot + 
+  geom_smooth(
+    aes(.Time, .Hourly_Counts, group = Date), 
+    se = FALSE, method = "loess"
+  )
+
+prettify(p_boxplot_2)
+
+```
+
+
 
 The content is based on the paper
 
