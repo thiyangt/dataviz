@@ -55,3 +55,13 @@ Here's your roadmap for the semester! Class materials will be added on the day o
 [Visualizing time series data](/slides/tsviz.html)
  
 [****](/rscript/1_toothgrowth.R)[*****-1](https://github.com/thiyangt/dataviz/blob/master/static/slides/Data_visualization_2022.Rmd) [*****-2](https://github.com/thiyangt/dataviz/blob/master/static/slides/dis22.Rmd)[*****-7](/slides/tsviz.Rmd)
+
+📊 Week 7: 18 July 2023: 
+
+In-class Assignment 1
+
+[Visualizing large collection of time series data](https://pkg.earo.me/rwalkr/)
+
+
+📊 Week 8: 25 July 2023: Calendar-based visualization of time series
+
