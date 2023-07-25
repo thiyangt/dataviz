@@ -1,0 +1,121 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# ASP 460 2.0 Data Visualisation
+
+## Calendar-based Time Series Visualization
+
+
+
+### R Packages
+
+```{r}
+library(tidyverse)
+# install.packages("remotes")
+# remotes::install_github("earowang/sugrrants")
+library(sugrrants)
+library(tsibble)
+library(lubridate)
+theme_set(theme_bw())
+```
+
+### Data
+
+```{r}
+hourly_peds
+glimpse(hourly_peds)
+unique(hourly_peds$Sensor_Name)
+```
+
+### Data Visualization
+
+> Plot 1
+
+```{r, fig.height=20, fig.width=20}
+hourly_peds %>%
+  filter(Date < as.Date("2016-03-01")) %>% 
+  ggplot(aes(x = Time, y = Hourly_Counts, colour = Sensor_Name)) +
+  geom_line() +
+  facet_calendar(~ Date) + 
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+> Plot 2
+
+```{r, fig.height=20}
+hourly_peds %>% 
+  ggplot(aes(x = Date, y = Hourly_Counts, colour = Sensor_Name)) +
+  geom_line(size = 0.3) +
+  facet_grid(
+    Sensor_Name ~ ., 
+    labeller = labeller(Sensor_Name = label_wrap_gen(20))
+  ) + theme(legend.position = "bottom") +
+  xlab("Date Time") +
+  ylab("Hourly Counts")
+```
+
+Your turn: Level-up plot 2
+
+> Plot 3
+
+```{r}
+fs <- hourly_peds %>% 
+  filter(Sensor_Name == "Flagstaff Station")
+fs
+glimpse(fs)
+
+fs_cal <- fs %>%
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date)
+fs_cal
+glimpse(fs_cal)
+
+p_fs <- fs_cal %>% 
+  ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
+  geom_line() +
+  theme(legend.position = "bottom")
+
+p_fs
+
+
+prettify(p_fs)
+```
+
+Your turn:
+
+> Plot 4
+
+
+```{r}
+fs_cal_free <- fs %>% 
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date, scale = "free")
+
+p_fs_free <- fs_cal_free %>% 
+  ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) +
+  geom_line() +
+  theme(legend.position = "bottom")
+prettify(p_fs_free)
+
+```
+
+> Plot 5
+
+```{r}
+fs_polar <- fs %>% 
+  frame_calendar(x = Time, y = Hourly_Counts, date = Date, polar = TRUE)
+
+p_fs_polar <- fs_polar %>% 
+  ggplot(aes(x = .Time, y = .Hourly_Counts, group = Date)) + geom_path() +
+  theme(legend.position = "bottom")
+prettify(p_fs_polar)
+
+```
+
+The content is based on the paper
+
+Wang, E., Cook, D., & Hyndman, R. J. (2020). Calendar-based graphics for visualizing people’s daily schedules. Journal of computational and graphical statistics, 29(3), 490-502.

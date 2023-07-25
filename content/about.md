@@ -56,7 +56,7 @@ Here's your roadmap for the semester! Class materials will be added on the day o
  
 [****](/rscript/1_toothgrowth.R)[*****-1](https://github.com/thiyangt/dataviz/blob/master/static/slides/Data_visualization_2022.Rmd) [*****-2](https://github.com/thiyangt/dataviz/blob/master/static/slides/dis22.Rmd)[*****-7](/slides/tsviz.Rmd)
 
-📊 Week 7: 18 July 2023: 
+📊 Week 7: 18 July 2023: In-class assignment and visualizing large collection of time series
 
 In-class Assignment 1
 
@@ -65,3 +65,10 @@ In-class Assignment 1
 
 📊 Week 8: 25 July 2023: Calendar-based visualization of time series
 
+[Calendar-based visualization of time series](https://pkg.earo.me/sugrrants/)
+
+[Lecture notes](/caltsviz.html)
+
+
+
+📊 Week 9: 26 July 2023: Interactive Graphics
