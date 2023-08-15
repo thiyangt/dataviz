@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Spatial Visualization</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Thiyanga S. Talagala" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
+    <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/cc-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="libs/figure-captions.css" type="text/css" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Spatial Visualization
+]
+.author[
+### Thiyanga S. Talagala
+]
+
+---
+
+
+
+
+
+
+### R packages for spatial data analysis
+
+.pull-left[
+
+- rgdal
+
+- sp
+
+- rgeos
+
+- raster
+
+- sf
+
+- tmap
+
+- leaflet
+
+- ggmap
+
+
+
+]
+
+.pull-right[
+
+- maptools
+
+- gstat
+
+- spatstat
+
+- stars
+
+- geosphere
+
+- RgoogleMaps
+
+- rasterVis
+
+
+
+]
+
+---
+&lt;!--https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-vector-data-r/--&gt;
+
+### Geospatial vector data structures
+
+
+
+**Point:** Individual longitude and latitude of locations
+
+Eg: Locations, Buildings
+
+**Lines:** Two or more vertices or points that are connected
+
+Eg: Roads, rivers
+
+**Polygons:** Three or more vertices and closed
+
+Eg: Area of a country, state, district
+
+
+
+
+---
+
+.pull-left[
+
+**What do we want to plot?** Globe - 3D
+
+
+![](https://media.tenor.com/4A4UHbVtBIIAAAAC/globe-world.gif)
+
+]
+--
+
+.pull-right[
+
+**Where do we plot?** 
+Computer screen or paper - 2D
+
+
+![](sp_viz_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+
+
+]
+
+---
+class: center, middle, inverse
+
+# Challenge
+
+## How to transform this three dimensional angular system to a two dimensional cartesian system?
+
+--
+&gt; Solution : Spatial projection
+&lt;!--https://rspatial.org/raster/spatial/6-crs.html--&gt;
+---
+&lt;!--https://docs.qgis.org/3.28/en/docs/gentle_gis_introduction/coordinate_reference_systems.html--&gt;
+
+## Types of map projections
+
+- Cylindrical projections
+
+- Conical projections
+
+- Planar projections
+
+&gt; Visit [here](https://johnedevans.files.wordpress.com/2019/01/map-projections-explained.jpg) to see the visual illustration.
+
+---
+## **C**oordinate **R**eference **S**ystem (**CRS**)  &lt;!--are used to convert locations on the 3D globe, to a 2D cartesian plane--&gt;
+
+
+Different types of CRSs:
+
+- Mercator
+
+- UTM
+
+- Robinson
+
+- Lambert
+
+- Sinusoidal
+
+- Alber
+
+---
+
+&lt;!--https://rpubs.com/mdavril_gsu/794598--&gt;
+
+
+
+
+
+![](sp_viz_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+---
+![](sp_viz_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+---
+
+![](sp_viz_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+---
+
+![](sp_viz_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+
+---
+
+### Why some areas are stretched and some areas are compressed?
+
+
+Projecting data from a 3D round surface onto a 2D flat surface results in visual modifications to the data.
+
+--
+### Why multiple CRS?
+
+To optimize to best represent the:
+
+shape 
+
+distance 
+
+area
+
+direction
+
+---
+
+## Shapefiles
+
+- Spatial data in vector format are often stored in a shapefile format
+
+- The structure of points, lines, and polygons are different, each individual shapefile can only contain one vector type (all points, all lines or all polygons).
+
+- You will not find a mixture of point, line and polygon objects in a single shapefile.
+
+- Shapefiles contain geographic vector data that is expressed in a particular CRS
+
+---
+
+- A shapefile is made up of three required files with the same prefix ('spatial-data' in this case) but different extensions:
+
+    **spatial-data.shp:** main file that stores records of each shape geometries
+
+    **spatial-data.shx:** index of how the geometries in the main file relate to one-another
+
+    **spatial-data.dbf:** attributes of each record
+---
+## CRS
+
+- geodetic datum (e.g, WGS84)
+
+- the type of map projection (e.g., Mercator) 
+- the parameters of the projection (e.g., location of the origin) 
+
+---
+
+## Two types of maps 
+
+1. Simple feature map
+
+2. Polygon maps
+
+---
+class: center, middle
+
+# Simple feature map
+
+
+
+---
+## Example
+
+
+```r
+# install.packages("devtools")
+devtools::install_github("thiyangt/ceylon")
+library(ceylon)
+library(tidyverse)
+library(sp)
+library(viridis)
+```
+
+
+```r
+data(sf_sl_0)
+class(sf_sl_0)
+```
+
+```
+## [1] "sf"         "tbl_df"     "tbl"        "data.frame"
+```
+
+```r
+# work with spatial data; sp package will load with rgdal.
+library(rgdal)
+```
+
+```
+## Please note that rgdal will be retired during October 2023,
+## plan transition to sf/stars/terra functions using GDAL and PROJ
+## at your earliest convenience.
+## See https://r-spatial.org/r/2023/05/15/evolution4.html and https://github.com/r-spatial/evolution
+## rgdal: version: 1.6-7, (SVN revision 1203)
+## Geospatial Data Abstraction Library extensions to R successfully loaded
+## Loaded GDAL runtime: GDAL 3.4.2, released 2022/03/08
+## Path to GDAL shared files: /Library/Frameworks/R.framework/Versions/4.2/Resources/library/rgdal/gdal
+## GDAL binary built with GEOS: FALSE 
+## Loaded PROJ runtime: Rel. 8.2.1, January 1st, 2022, [PJ_VERSION: 821]
+## Path to PROJ shared files: /Library/Frameworks/R.framework/Versions/4.2/Resources/library/rgdal/proj
+## PROJ CDN enabled: FALSE
+## Linking to sp version:1.6-1
+## To mute warnings of possible GDAL/OSR exportToProj4() degradation,
+## use options("rgdal_show_exportToProj4_warnings"="none") before loading sp or rgdal.
+```
+
+```r
+# for metadata/attributes- vectors or rasters
+library(raster)
+```
+
+```
+## 
+## Attaching package: 'raster'
+```
+
+```
+## The following object is masked from 'package:dplyr':
+## 
+##     select
+```
+
+```r
+crs(sf_sl_0)
+```
+
+```
+## [1] "PROJCRS[\"SLD99 / Sri Lanka Grid 1999\",\n    BASEGEOGCRS[\"SLD99\",\n        DATUM[\"Sri Lanka Datum 1999\",\n            ELLIPSOID[\"Everest 1830 (1937 Adjustment)\",6377276.345,300.8017,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",5233]],\n    CONVERSION[\"Sri Lanka Grid 1999\",\n        METHOD[\"Transverse Mercator\",\n            ID[\"EPSG\",9807]],\n        PARAMETER[\"Latitude of natural origin\",7.00047152777778,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8801]],\n        PARAMETER[\"Longitude of natural origin\",80.7717130833333,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"Scale factor at natural origin\",0.9999238418,\n            SCALEUNIT[\"unity\",1],\n            ID[\"EPSG\",8805]],\n        PARAMETER[\"False easting\",500000,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",500000,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]]],\n    CS[Cartesian,2],\n        AXIS[\"(E)\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1]],\n        AXIS[\"(N)\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1]],\n    USAGE[\n        SCOPE[\"unknown\"],\n        AREA[\"Sri Lanka - onshore\"],\n        BBOX[5.86,79.64,9.88,81.95]],\n    ID[\"EPSG\",5235]]"
+```
+
+---
+
+
+```r
+sf_sl_0
+```
+
+```
+## Simple feature collection with 1 feature and 1 field
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 362203.3 ymin: 380301.9 xmax: 621918.1 ymax: 813560.9
+## Projected CRS: SLD99 / Sri Lanka Grid 1999
+## # A tibble: 1 × 2
+##                                                                 geometry COUNTRY
+##                                                       &lt;MULTIPOLYGON [m]&gt; &lt;chr&gt;  
+## 1 (((481925.5 381353.7, 481922.9 381350.3, 481919 381348.2, 481914.6 38… SRI LA…
+```
+
+---
+
+## 2. Visualizing using shapefiles: map of Sri Lanka
+
+
+```r
+ggplot(sf_sl_0) +
+  geom_sf()
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+ggplot(sf_sl_0) +
+  geom_sf(fill='beige') +
+theme_minimal()
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+library(knitr)
+sf_sl_0 %&gt;% kable()
+```
+
+
+
+|geometry                       |COUNTRY   |
+|:------------------------------|:---------|
+|MULTIPOLYGON (((481925.5 38... |SRI LANKA |
+
+---
+
+## Your turn: Draw district and province maps
+
+data:
+
+```r
+province
+district
+```
+
+---
+
+## Your turn:
+
+Colour provinces according to the population.
+
+---
+
+
+```r
+ggplot(sf_sl_0) +
+  geom_sf(fill='beige') +
+ggspatial::annotation_north_arrow(location = "br")+
+  ggspatial::annotation_scale(location = "bl")
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+
+
+---
+## More work
+
+&lt;!--https://rpubs.com/Dr_Gurpreet/spatial_data_visualisation_R--&gt;
+
+
+```r
+library(spData)
+```
+
+```
+## To access larger datasets in this package, install the spDataLarge
+## package with: `install.packages('spDataLarge',
+## repos='https://nowosad.github.io/drat/', type='source')`
+```
+
+```
+## 
+## Attaching package: 'spData'
+```
+
+```
+## The following object is masked _by_ '.GlobalEnv':
+## 
+##     world
+```
+
+---
+
+
+```r
+data("us_states") # from spData package
+us_states
+```
+
+```
+## Simple feature collection with 49 features and 6 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -124.7042 ymin: 24.55868 xmax: -66.9824 ymax: 49.38436
+## Geodetic CRS:  NAD83
+## First 10 features:
+##    GEOID        NAME   REGION             AREA total_pop_10 total_pop_15
+## 1     01     Alabama    South 133709.27 [km^2]      4712651      4830620
+## 2     04     Arizona     West 295281.25 [km^2]      6246816      6641928
+## 3     08    Colorado     West 269573.06 [km^2]      4887061      5278906
+## 4     09 Connecticut Norteast  12976.59 [km^2]      3545837      3593222
+## 5     12     Florida    South 151052.01 [km^2]     18511620     19645772
+## 6     13     Georgia    South 152725.21 [km^2]      9468815     10006693
+## 7     16       Idaho     West 216512.66 [km^2]      1526797      1616547
+## 8     18     Indiana  Midwest  93648.40 [km^2]      6417398      6568645
+## 9     20      Kansas  Midwest 213037.08 [km^2]      2809329      2892987
+## 10    22   Louisiana    South 122345.76 [km^2]      4429940      4625253
+##                          geometry
+## 1  MULTIPOLYGON (((-88.20006 3...
+## 2  MULTIPOLYGON (((-114.7196 3...
+## 3  MULTIPOLYGON (((-109.0501 4...
+## 4  MULTIPOLYGON (((-73.48731 4...
+## 5  MULTIPOLYGON (((-81.81169 2...
+## 6  MULTIPOLYGON (((-85.60516 3...
+## 7  MULTIPOLYGON (((-116.916 45...
+## 8  MULTIPOLYGON (((-87.52404 4...
+## 9  MULTIPOLYGON (((-102.0517 4...
+## 10 MULTIPOLYGON (((-92.01783 2...
+```
+
+---
+
+
+```r
+data("us_states") # from spData package
+us_states
+```
+
+```
+## Simple feature collection with 49 features and 6 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -124.7042 ymin: 24.55868 xmax: -66.9824 ymax: 49.38436
+## Geodetic CRS:  NAD83
+## First 10 features:
+##    GEOID        NAME   REGION             AREA total_pop_10 total_pop_15
+## 1     01     Alabama    South 133709.27 [km^2]      4712651      4830620
+## 2     04     Arizona     West 295281.25 [km^2]      6246816      6641928
+## 3     08    Colorado     West 269573.06 [km^2]      4887061      5278906
+## 4     09 Connecticut Norteast  12976.59 [km^2]      3545837      3593222
+## 5     12     Florida    South 151052.01 [km^2]     18511620     19645772
+## 6     13     Georgia    South 152725.21 [km^2]      9468815     10006693
+## 7     16       Idaho     West 216512.66 [km^2]      1526797      1616547
+## 8     18     Indiana  Midwest  93648.40 [km^2]      6417398      6568645
+## 9     20      Kansas  Midwest 213037.08 [km^2]      2809329      2892987
+## 10    22   Louisiana    South 122345.76 [km^2]      4429940      4625253
+##                          geometry
+## 1  MULTIPOLYGON (((-88.20006 3...
+## 2  MULTIPOLYGON (((-114.7196 3...
+## 3  MULTIPOLYGON (((-109.0501 4...
+## 4  MULTIPOLYGON (((-73.48731 4...
+## 5  MULTIPOLYGON (((-81.81169 2...
+## 6  MULTIPOLYGON (((-85.60516 3...
+## 7  MULTIPOLYGON (((-116.916 45...
+## 8  MULTIPOLYGON (((-87.52404 4...
+## 9  MULTIPOLYGON (((-102.0517 4...
+## 10 MULTIPOLYGON (((-92.01783 2...
+```
+
+---
+
+## Plotting roads and other information
+
+Click [here](https://www.emilyburchfield.org/courses/eds/making_maps_in_r)
+
+---
+
+&lt;!--https://ggplot2-book.org/maps.html--&gt;
+
+## Map of Australia
+
+
+```r
+library(ozmaps)
+library(sf)
+oz_states &lt;- ozmaps::ozmap_states
+oz_states
+```
+
+```
+## Simple feature collection with 9 features and 1 field
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 105.5507 ymin: -43.63203 xmax: 167.9969 ymax: -9.229287
+## Geodetic CRS:  GDA94
+## # A tibble: 9 × 2
+##   NAME                                                                  geometry
+## * &lt;chr&gt;                                                       &lt;MULTIPOLYGON [°]&gt;
+## 1 New South Wales              (((150.7016 -35.12286, 150.6611 -35.11782, 150.6…
+## 2 Victoria                     (((146.6196 -38.70196, 146.6721 -38.70259, 146.6…
+## 3 Queensland                   (((148.8473 -20.3457, 148.8722 -20.37575, 148.85…
+## 4 South Australia              (((137.3481 -34.48242, 137.3749 -34.46885, 137.3…
+## 5 Western Australia            (((126.3868 -14.01168, 126.3625 -13.98264, 126.3…
+## 6 Tasmania                     (((147.8397 -40.29844, 147.8902 -40.30258, 147.8…
+## 7 Northern Territory           (((136.3669 -13.84237, 136.3339 -13.83922, 136.3…
+## 8 Australian Capital Territory (((149.2317 -35.222, 149.2346 -35.24047, 149.271…
+## 9 Other Territories            (((167.9333 -29.05421, 167.9188 -29.0344, 167.93…
+```
+
+---
+## Obtain the following map
+
+![](sp_viz_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+---
+
+## `coord_sf()`
+
+- ensures that every layer in the plot uses the same projection
+
+---
+
+## Mark following locations on the map
+
+
+```r
+oz_capitals &lt;- tibble::tribble( 
+  ~city,           ~lat,     ~lon,
+  "Sydney",    -33.8688, 151.2093,  
+  "Melbourne", -37.8136, 144.9631, 
+  "Brisbane",  -27.4698, 153.0251, 
+  "Adelaide",  -34.9285, 138.6007, 
+  "Perth",     -31.9505, 115.8605, 
+  "Hobart",    -42.8821, 147.3272, 
+  "Canberra",  -35.2809, 149.1300, 
+  "Darwin",    -12.4634, 130.8456, 
+)
+oz_capitals
+```
+
+```
+## # A tibble: 8 × 3
+##   city        lat   lon
+##   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;
+## 1 Sydney    -33.9  151.
+## 2 Melbourne -37.8  145.
+## 3 Brisbane  -27.5  153.
+## 4 Adelaide  -34.9  139.
+## 5 Perth     -32.0  116.
+## 6 Hobart    -42.9  147.
+## 7 Canberra  -35.3  149.
+## 8 Darwin    -12.5  131.
+```
+
+---
+## Projecting your data
+
+
+```r
+library(sf)
+library(ggplot2)
+# devtools::install_github("hrbrmstr/albersusa")
+library(albersusa)
+```
+
+```
+## Please note that 'maptools' will be retired during October 2023,
+## plan transition at your earliest convenience (see
+## https://r-spatial.org/r/2023/05/15/evolution4.html and earlier blogs
+## for guidance);some functionality will be moved to 'sp'.
+##  Checking rgeos availability: TRUE
+```
+
+```
+## rgeos version: 0.6-4, (SVN revision 699)
+##  GEOS runtime version: 3.10.2-CAPI-1.16.0 
+##  Please note that rgeos will be retired during October 2023,
+## plan transition to sf or terra functions using GEOS at your earliest convenience.
+## See https://r-spatial.org/r/2023/05/15/evolution4.html for details.
+##  GEOS using OverlayNG
+##  Linking to sp version: 2.0-0 
+##  Polygon checking: TRUE
+```
+
+---
+
+
+```r
+crs_use = "+proj=laea +lat_0=30 +lon_0=-95"
+
+d_points = data.frame(long = c(-110, -103, -84), 
+                      lat  = c(45, 40, 41))
+```
+
+---
+
+
+```r
+A &lt;- ggplot(data = usa_sf()) +
+  geom_sf() + 
+  geom_point(data = d_points, 
+             aes(x = long, y = lat), 
+             color = "red", size = 5) + 
+  theme_minimal() + 
+  ggtitle("(A) right point position, wrong projection")
+```
+
+---
+
+
+```r
+A
+```
+
+```
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+B &lt;- ggplot(data = usa_sf()) +
+  geom_sf() + 
+  geom_point(data = d_points, 
+             aes(x = long, y = lat), 
+             color = "red", size = 5) + 
+  coord_sf(crs = crs_use) + 
+  theme_minimal() + 
+  ggtitle("(B) right projection, wrong points using geom_point()")
+```
+
+---
+
+```r
+B
+```
+
+```
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+C &lt;- ggplot() + 
+  geom_sf(data = usa_sf()) + 
+  geom_sf(data = st_as_sf(d_points,
+                          coords = c("long", "lat"), crs = crs_use), 
+          color = "red", size = 5) + 
+  coord_sf(crs = crs_use) + 
+  theme_minimal() + 
+  ggtitle("(C) right projection, wrong points using geom_sf() points")
+```
+
+---
+
+
+```r
+C
+```
+
+```
+## old-style crs object detected; please recreate object with a recent sf::st_crs()
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+
+---
+
+
+
+
+```r
+#remotes::install_github("ropensci/USAboundaries")
+#install.packages("USAboundariesData", repos = "https://ropensci.r-universe.dev", type = "source")
+library(USAboundaries)
+crs_use &lt;- "+proj=laea +lat_0=30 +lon_0=-95"
+
+usa_sf &lt;- us_boundaries(type="state", resolution = "low") %&gt;% 
+  dplyr::filter(!state_abbr %in% c("PR", "AK", "HI")) %&gt;% 
+  st_transform(crs = crs_use)
+
+d_points &lt;- data.frame(long = c(-110, -103, -84), 
+                      lat  = c(45, 40, 41)) %&gt;% 
+  st_as_sf(coords = c("long", "lat"), crs = 4326) %&gt;% 
+  st_transform(crs = crs_use)
+
+D &lt;- ggplot(data = usa_sf) +
+  geom_sf() + 
+  geom_sf(data = d_points, 
+             color = "red", size = 5) + 
+  theme_minimal()
+```
+
+---
+
+
+
+`st_as_sf()`: what coordinate system do the coordinates you just gave me use?
+
+`st_transform()`: what coordinate system should I transform those coordinates into?
+
+---
+
+## What does CRS 4326 mean?
+
+- The Three Most Common Coordinate Reference Systems
+
+- WGS84 and EPSG:4326 are geographic CRS. 
+
+- It means that they use latitude and longitude coordinates to specify a location on the surface of the earth.
+---
+
+
+```r
+D
+```
+
+```
+## function (expr, name) 
+## .External(C_doD, expr, name)
+## &lt;bytecode: 0x7fca5472fe70&gt;
+## &lt;environment: namespace:stats&gt;
+```
+
+---
+
+## Projecting your data
+
+Click [here](https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-to-coordinate-reference-systems/)
+
+
+---
+class: center, middle
+
+# 2. Polygon map
+
+---
+
+
+```r
+# devtools::install_github("UrbanInstitute/urbnmapr")
+library(tidyverse)
+library(magrittr)
+```
+
+```
+## 
+## Attaching package: 'magrittr'
+```
+
+```
+## The following object is masked from 'package:raster':
+## 
+##     extract
+```
+
+```
+## The following object is masked from 'package:purrr':
+## 
+##     set_names
+```
+
+```
+## The following object is masked from 'package:tidyr':
+## 
+##     extract
+```
+
+```r
+library(urbnmapr)
+library(usmap) # to obtain population data
+library(ggthemes)
+library(scales)
+```
+
+```
+## 
+## Attaching package: 'scales'
+```
+
+```
+## The following object is masked from 'package:viridis':
+## 
+##     viridis_pal
+```
+
+```
+## The following object is masked from 'package:purrr':
+## 
+##     discard
+```
+
+```
+## The following object is masked from 'package:readr':
+## 
+##     col_factor
+```
+
+```r
+library(geofacet)
+```
+
+---
+
+
+```r
+statepop1 &lt;- statepop %&gt;% rename(state_name = full)
+statepop2 &lt;- full_join(statepop1, states, by = "state_name")
+head(statepop2)
+```
+
+```
+## # A tibble: 6 × 12
+##   fips  abbr  state_name pop_2015  long   lat order hole  piece group state_fips
+##   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;lgl&gt; &lt;fct&gt; &lt;fct&gt; &lt;chr&gt;     
+## 1 01    AL    Alabama     4858979 -88.5  31.9     1 FALSE 1     01.1  01        
+## 2 01    AL    Alabama     4858979 -88.5  31.9     2 FALSE 1     01.1  01        
+## 3 01    AL    Alabama     4858979 -88.5  31.9     3 FALSE 1     01.1  01        
+## 4 01    AL    Alabama     4858979 -88.5  32.0     4 FALSE 1     01.1  01        
+## 5 01    AL    Alabama     4858979 -88.5  32.0     5 FALSE 1     01.1  01        
+## 6 01    AL    Alabama     4858979 -88.5  32.1     6 FALSE 1     01.1  01        
+## # ℹ 1 more variable: state_abbv &lt;chr&gt;
+```
+
+---
+
+
+```r
+ggplot() + 
+  geom_point(data = statepop2, mapping = aes(x = long, y = lat, group = group), fill = "grey", color = "black") 
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+ggplot() + 
+  geom_polygon(data = statepop2, mapping = aes(x = long, y = lat, group = group),fill = "grey", color = "black") 
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+
+---
+
+Visit here: https://tstdataviz.netlify.app/slides/spatiotemporal.html
+---
+
+# What is next?
+
+### Visualizing using webmaps
+
+
+```r
+library(leaflet)
+```
+
+### Visualization of raster data
+
+
+```r
+library(raster)
+```
+
+
+
+---
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -40,30 +40,30 @@ Here's your roadmap for the semester! Class materials will be added on the day o
 [Qualitative data visualisation](https://tstdataviz.netlify.app/slides/data_visualization_2022)
 
  
-📊 Week 5: 27 June 2023: Visualizing distributions of data
+📊 Week 6: 27 June 2023: Visualizing distributions of data
 
 [Visualising distributions of data ](https://tstdataviz.netlify.app/slides/dis22.html#22)
 
-📊 Week 6: 04 July 2023: Colour scales and coordinate systems with ggplot
+📊 Week 7: 04 July 2023: Colour scales and coordinate systems with ggplot
 
 [Coordinate systems and axes](https://tstdataviz.netlify.app/slides/lesson5viz2021.html#1)
 
 [Colour scales](https://tstdataviz.netlify.app/slides/lesson6viz2021.html#1)
 
-📊 Week 7: 11 July 2023: Visualizing time series data
+📊 Week 8: 11 July 2023: Visualizing time series data
 
 [Visualizing time series data](/slides/tsviz.html)
  
 [****](/rscript/1_toothgrowth.R)[*****-1](https://github.com/thiyangt/dataviz/blob/master/static/slides/Data_visualization_2022.Rmd) [*****-2](https://github.com/thiyangt/dataviz/blob/master/static/slides/dis22.Rmd)[*****-7](/slides/tsviz.Rmd)
 
-📊 Week 7: 18 July 2023: In-class assignment and visualizing large collection of time series
+📊 Week 9: 18 July 2023: In-class assignment and visualizing large collection of time series
 
 In-class Assignment 1
 
 [Visualizing large collection of time series data](https://pkg.earo.me/rwalkr/)
 
 
-📊 Week 8: 25 July 2023: Calendar-based visualization of time series
+📊 Week 10: 25 July 2023: Calendar-based visualization of time series
 
 [Calendar-based visualization of time series](https://pkg.earo.me/sugrrants/)
 
@@ -71,4 +71,6 @@ In-class Assignment 1
 
 
 
-📊 Week 9: 26 July 2023: Interactive Graphics
+📊 Week 11: Spatial Visualization
+
+[Plot maps](/slides/sp_viz.html))

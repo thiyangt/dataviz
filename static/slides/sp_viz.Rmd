@@ -1,0 +1,654 @@
+---
+title: "Spatial Visualization"
+author: "Thiyanga S. Talagala"
+date: ""
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+      - xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#081d58",
+  text_bold_color = "#ce1256",
+  title_slide_text_color = "#edf8b1",
+  header_font_google = google_font("Josefin Sans"),
+  base_font_size = "20px",
+  text_font_size = "1.5rem"
+ #text_font_google   = google_font("Montserrat", "300", "300i")
+ # code_font_google   = google_font("Fira Mono")
+)
+```
+
+
+### R packages for spatial data analysis
+
+.pull-left[
+
+- rgdal
+
+- sp
+
+- rgeos
+
+- raster
+
+- sf
+
+- tmap
+
+- leaflet
+
+- ggmap
+
+
+
+]
+
+.pull-right[
+
+- maptools
+
+- gstat
+
+- spatstat
+
+- stars
+
+- geosphere
+
+- RgoogleMaps
+
+- rasterVis
+
+
+
+]
+
+---
+<!--https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-vector-data-r/-->
+
+### Geospatial vector data structures
+
+
+
+**Point:** Individual longitude and latitude of locations
+
+Eg: Locations, Buildings
+
+**Lines:** Two or more vertices or points that are connected
+
+Eg: Roads, rivers
+
+**Polygons:** Three or more vertices and closed
+
+Eg: Area of a country, state, district
+
+
+
+
+---
+
+.pull-left[
+
+**What do we want to plot?** Globe - 3D
+
+
+![](https://media.tenor.com/4A4UHbVtBIIAAAAC/globe-world.gif)
+
+]
+--
+
+.pull-right[
+
+**Where do we plot?** 
+Computer screen or paper - 2D
+
+
+```{r, echo=FALSE}
+library(ggplot2)
+map <- map_data("world")
+ggplot(data = map, aes(long, lat, group = group)) + geom_polygon(color = "white") +
+  labs(x = "Longitude",
+       y = "Latitude") +
+  theme(legend.position = "none")
+```
+
+
+]
+
+---
+class: center, middle, inverse
+
+# Challenge
+
+## How to transform this three dimensional angular system to a two dimensional cartesian system?
+
+--
+> Solution : Spatial projection
+<!--https://rspatial.org/raster/spatial/6-crs.html-->
+---
+<!--https://docs.qgis.org/3.28/en/docs/gentle_gis_introduction/coordinate_reference_systems.html-->
+
+## Types of map projections
+
+- Cylindrical projections
+
+- Conical projections
+
+- Planar projections
+
+> Visit [here](https://johnedevans.files.wordpress.com/2019/01/map-projections-explained.jpg) to see the visual illustration.
+
+---
+## **C**oordinate **R**eference **S**ystem (**CRS**)  <!--are used to convert locations on the 3D globe, to a 2D cartesian plane-->
+
+
+Different types of CRSs:
+
+- Mercator
+
+- UTM
+
+- Robinson
+
+- Lambert
+
+- Sinusoidal
+
+- Alber
+
+---
+
+<!--https://rpubs.com/mdavril_gsu/794598-->
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+#https://r-spatial.org/r/2018/10/25/ggplot2-sf.html
+world <- ne_countries(scale = "medium", returnclass = "sf")
+p1 <- ggplot(data = world)+
+  geom_sf()+
+  labs(title = 'ESRI:54030: Robinson projection')+             theme(plot.title = element_text(face = "bold"))+
+  coord_sf(crs = st_crs("ESRI:54030"))
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE,fig.width=20, fig.height=15}
+p2 <- ggplot(data = world)+
+  geom_sf()+
+  labs(title = 'ESRI:54009: Mollweide projection')+             theme(plot.title = element_text(face = "bold"))+
+  coord_sf(crs = st_crs("ESRI:54009"))
+p3 <- ggplot(data = world)+
+  geom_sf()+
+  labs(title = 'ESRI:54002: Equidistant cylindrical projection')+             theme(plot.title = element_text(face = "bold"))+
+  coord_sf(crs = st_crs("ESRI:54002"))
+p4 <- ggplot(data = world)+
+  geom_sf()+
+  labs(title = 'ESRI:54008: Sinusoidal projection')+             theme(plot.title = element_text(face = "bold"))+
+  coord_sf(crs = st_crs("ESRI:54008"))
+
+ 
+```
+
+```{r, fig.width=15, echo=FALSE}
+p1
+```
+
+---
+```{r, fig.width=15, echo=FALSE}
+p2
+```
+---
+
+```{r, fig.width=15, echo=FALSE}
+p3
+```
+
+---
+
+```{r, fig.width=15, echo=FALSE}
+p4
+```
+
+
+---
+
+### Why some areas are stretched and some areas are compressed?
+
+
+Projecting data from a 3D round surface onto a 2D flat surface results in visual modifications to the data.
+
+--
+### Why multiple CRS?
+
+To optimize to best represent the:
+
+shape 
+
+distance 
+
+area
+
+direction
+
+---
+
+## Shapefiles
+
+- Spatial data in vector format are often stored in a shapefile format
+
+- The structure of points, lines, and polygons are different, each individual shapefile can only contain one vector type (all points, all lines or all polygons).
+
+- You will not find a mixture of point, line and polygon objects in a single shapefile.
+
+- Shapefiles contain geographic vector data that is expressed in a particular CRS
+
+---
+
+- A shapefile is made up of three required files with the same prefix ('spatial-data' in this case) but different extensions:
+
+    **spatial-data.shp:** main file that stores records of each shape geometries
+
+    **spatial-data.shx:** index of how the geometries in the main file relate to one-another
+
+    **spatial-data.dbf:** attributes of each record
+---
+## CRS
+
+- geodetic datum (e.g, WGS84)
+
+- the type of map projection (e.g., Mercator) 
+- the parameters of the projection (e.g., location of the origin) 
+
+---
+
+## Two types of maps 
+
+1. Simple feature map
+
+2. Polygon maps
+
+---
+class: center, middle
+
+# Simple feature map
+
+
+
+---
+## Example
+
+```{r, message=FALSE, warning=FALSE}
+# install.packages("devtools")
+devtools::install_github("thiyangt/ceylon")
+library(ceylon)
+library(tidyverse)
+library(sp)
+library(viridis)
+```
+
+```{r}
+data(sf_sl_0)
+class(sf_sl_0)
+# work with spatial data; sp package will load with rgdal.
+library(rgdal)
+# for metadata/attributes- vectors or rasters
+library(raster)
+crs(sf_sl_0)
+
+
+```
+
+---
+
+```{r}
+sf_sl_0
+```
+
+---
+
+## 2. Visualizing using shapefiles: map of Sri Lanka
+
+```{r}
+ggplot(sf_sl_0) +
+  geom_sf()
+```
+
+---
+
+```{r}
+ggplot(sf_sl_0) +
+  geom_sf(fill='beige') +
+theme_minimal()
+```
+
+---
+
+```{r}
+library(knitr)
+sf_sl_0 %>% kable()
+```
+
+---
+
+## Your turn: Draw district and province maps
+
+data:
+
+```r
+province
+district
+```
+
+---
+
+## Your turn:
+
+Colour provinces according to the population.
+
+---
+
+```{r}
+ggplot(sf_sl_0) +
+  geom_sf(fill='beige') +
+ggspatial::annotation_north_arrow(location = "br")+
+  ggspatial::annotation_scale(location = "bl")
+```
+
+
+
+---
+## More work
+
+<!--https://rpubs.com/Dr_Gurpreet/spatial_data_visualisation_R-->
+
+```{r}
+library(spData)
+```
+
+---
+
+```{r}
+data("us_states") # from spData package
+us_states
+```
+
+---
+
+```{r}
+data("us_states") # from spData package
+us_states
+```
+
+---
+
+## Plotting roads and other information
+
+Click [here](https://www.emilyburchfield.org/courses/eds/making_maps_in_r)
+
+---
+
+<!--https://ggplot2-book.org/maps.html-->
+
+## Map of Australia
+
+```{r}
+library(ozmaps)
+library(sf)
+oz_states <- ozmaps::ozmap_states
+oz_states
+```
+
+---
+## Obtain the following map
+
+```{r, echo=FALSE}
+ggplot(oz_states) + 
+  geom_sf() + 
+  coord_sf()
+```
+
+---
+
+## `coord_sf()`
+
+- ensures that every layer in the plot uses the same projection
+
+---
+
+## Mark following locations on the map
+
+```{r}
+oz_capitals <- tibble::tribble( 
+  ~city,           ~lat,     ~lon,
+  "Sydney",    -33.8688, 151.2093,  
+  "Melbourne", -37.8136, 144.9631, 
+  "Brisbane",  -27.4698, 153.0251, 
+  "Adelaide",  -34.9285, 138.6007, 
+  "Perth",     -31.9505, 115.8605, 
+  "Hobart",    -42.8821, 147.3272, 
+  "Canberra",  -35.2809, 149.1300, 
+  "Darwin",    -12.4634, 130.8456, 
+)
+oz_capitals
+```
+
+---
+## Projecting your data
+
+```{r}
+library(sf)
+library(ggplot2)
+# devtools::install_github("hrbrmstr/albersusa")
+library(albersusa)
+```
+
+---
+
+```{r}
+crs_use = "+proj=laea +lat_0=30 +lon_0=-95"
+
+d_points = data.frame(long = c(-110, -103, -84), 
+                      lat  = c(45, 40, 41))
+```
+
+---
+
+```{r}
+
+A <- ggplot(data = usa_sf()) +
+  geom_sf() + 
+  geom_point(data = d_points, 
+             aes(x = long, y = lat), 
+             color = "red", size = 5) + 
+  theme_minimal() + 
+  ggtitle("(A) right point position, wrong projection")
+```
+
+---
+
+```{r}
+A
+```
+
+---
+
+```{r}
+B <- ggplot(data = usa_sf()) +
+  geom_sf() + 
+  geom_point(data = d_points, 
+             aes(x = long, y = lat), 
+             color = "red", size = 5) + 
+  coord_sf(crs = crs_use) + 
+  theme_minimal() + 
+  ggtitle("(B) right projection, wrong points using geom_point()")
+```
+
+---
+```{r}
+B
+```
+
+---
+
+```{r}
+C <- ggplot() + 
+  geom_sf(data = usa_sf()) + 
+  geom_sf(data = st_as_sf(d_points,
+                          coords = c("long", "lat"), crs = crs_use), 
+          color = "red", size = 5) + 
+  coord_sf(crs = crs_use) + 
+  theme_minimal() + 
+  ggtitle("(C) right projection, wrong points using geom_sf() points")
+
+
+```
+
+---
+
+```{r}
+C
+```
+
+---
+
+
+
+```{r,eval=FALSE}
+#remotes::install_github("ropensci/USAboundaries")
+#install.packages("USAboundariesData", repos = "https://ropensci.r-universe.dev", type = "source")
+library(USAboundaries)
+crs_use <- "+proj=laea +lat_0=30 +lon_0=-95"
+
+usa_sf <- us_boundaries(type="state", resolution = "low") %>% 
+  dplyr::filter(!state_abbr %in% c("PR", "AK", "HI")) %>% 
+  st_transform(crs = crs_use)
+
+d_points <- data.frame(long = c(-110, -103, -84), 
+                      lat  = c(45, 40, 41)) %>% 
+  st_as_sf(coords = c("long", "lat"), crs = 4326) %>% 
+  st_transform(crs = crs_use)
+
+D <- ggplot(data = usa_sf) +
+  geom_sf() + 
+  geom_sf(data = d_points, 
+             color = "red", size = 5) + 
+  theme_minimal()
+```
+
+---
+
+
+
+`st_as_sf()`: what coordinate system do the coordinates you just gave me use?
+
+`st_transform()`: what coordinate system should I transform those coordinates into?
+
+---
+
+## What does CRS 4326 mean?
+
+- The Three Most Common Coordinate Reference Systems
+
+- WGS84 and EPSG:4326 are geographic CRS. 
+
+- It means that they use latitude and longitude coordinates to specify a location on the surface of the earth.
+---
+
+```{r}
+D
+```
+
+---
+
+## Projecting your data
+
+Click [here](https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-to-coordinate-reference-systems/)
+
+
+---
+class: center, middle
+
+# 2. Polygon map
+
+---
+
+```{r}
+# devtools::install_github("UrbanInstitute/urbnmapr")
+library(tidyverse)
+library(magrittr)
+library(urbnmapr)
+library(usmap) # to obtain population data
+library(ggthemes)
+library(scales)
+library(geofacet)
+
+```
+
+---
+
+```{r}
+statepop1 <- statepop %>% rename(state_name = full)
+statepop2 <- full_join(statepop1, states, by = "state_name")
+head(statepop2)
+```
+
+---
+
+```{r}
+ggplot() + 
+  geom_point(data = statepop2, mapping = aes(x = long, y = lat, group = group), fill = "grey", color = "black") 
+
+```
+
+---
+
+```{r}
+ggplot() + 
+  geom_polygon(data = statepop2, mapping = aes(x = long, y = lat, group = group),fill = "grey", color = "black") 
+```
+
+---
+
+Visit here: https://tstdataviz.netlify.app/slides/spatiotemporal.html
+---
+
+# What is next?
+
+### Visualizing using webmaps
+
+```{r}
+library(leaflet)
+```
+
+### Visualization of raster data
+
+```{r}
+library(raster)
+```
+
+
+
+---
+
