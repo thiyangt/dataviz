@@ -75,4 +75,4 @@ In-class Assignment 1
 
 [Plot maps](/slides/sp_viz.html)
 
-[Interactive plots]()
+[Interactive plots](https://tstdataviz.netlify.app/slides/interactiveplots)
