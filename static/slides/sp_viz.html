@@ -1056,7 +1056,7 @@ D
 ```
 ## function (expr, name) 
 ## .External(C_doD, expr, name)
-## &lt;bytecode: 0x7f9c0785f8c8&gt;
+## &lt;bytecode: 0x7fbf8041fc40&gt;
 ## &lt;environment: namespace:stats&gt;
 ```
 
@@ -1091,6 +1091,60 @@ the crs in `st_as_sf()` is "what language is the book written in?"
 **Additional reading**
 
 Click [here](https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-to-coordinate-reference-systems/)
+
+---
+
+## Interactive chart
+
+
+```r
+library(tidyverse)
+library(sf)
+library(viridis)
+#devtools::install_github("tylermorganwall/rayshader")
+library(rayshader)
+
+sightings = st_read(dsn = "~/Dropbox/R Code Repository/Sasquatch/WA_OR_Bigfoot.shp")
+sightings = mutate(sightings, Sightings = Join_Count)
+
+outputFile &lt;- file.path("~/Dropbox/R Code Repository/Sasquatch/", "sasquatch_sightings.mp4")
+```
+
+Resources: https://geospatialtraining.com/3d-mapping-of-sasquatch-sightings-in-r-with-rayshader/
+---
+
+
+```r
+sightings
+```
+
+---
+
+
+```r
+ggSightings &lt;- ggplot(data = sightings) + 
+  geom_sf(aes(fill = Sightings)) + 
+  scale_fill_viridis("Sightings") +
+  ggtitle("Sasquatch Sightings - Washington and Oregon") +
+  theme_bw()
+```
+
+---
+
+
+```r
+ggSightings
+```
+
+---
+
+
+```r
+plot_gg(ggSightings,multicore=TRUE,width=5,height=5,scale=250,windowsize=c(1400,866),
+        zoom = 0.55, phi = 30)
+render_snapshot()
+render_movie(filename = outputFile)
+```
 
 
 ---
@@ -1194,7 +1248,7 @@ ggplot() +
   geom_point(data = statepop2, mapping = aes(x = long, y = lat, group = group), fill = "grey", color = "black") 
 ```
 
-![](sp_viz_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
+![](sp_viz_files/figure-html/unnamed-chunk-56-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1204,14 +1258,15 @@ ggplot() +
   geom_polygon(data = statepop2, mapping = aes(x = long, y = lat, group = group),fill = "grey", color = "black") 
 ```
 
-![](sp_viz_files/figure-html/unnamed-chunk-52-1.png)&lt;!-- --&gt;
+![](sp_viz_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
 
 ---
 
 Visit here: https://tstdataviz.netlify.app/slides/spatiotemporal.html
 ---
 
-# What is next?
+
+# Moving forward
 
 ### Visualizing using webmaps
 
