@@ -363,19 +363,86 @@ district
 
 ---
 
-## Your turn:
+.pull-left[
 
-Colour provinces according to the population.
+Province
+
+```{r}
+ggplot(data=province) +
+  geom_sf()
+```
+
+]
+
+.pull-right[
+
+District
+
+```{r}
+ggplot(data=district) +
+  geom_sf()
+```
+
+
+]
+
+---
+
+
+
+
+```{r}
+province
+```
 
 ---
 
 ```{r}
+district
+```
+
+
+---
+
+## Guess the output.
+
+```{r,eval=FALSE}
+ggplot() +
+  geom_sf(data=province, lwd=2, col="black") + 
+  geom_sf(data=district, linetype=21, col="red")
+```
+
+---
+
+## Your turn:
+
+Colour provinces according to the population.
+
+
+---
+
+## Annotations
+
+.pull-left[
+```{r,eval=FALSE}
 ggplot(sf_sl_0) +
   geom_sf(fill='beige') +
 ggspatial::annotation_north_arrow(location = "br")+
   ggspatial::annotation_scale(location = "bl")
 ```
 
+]
+
+.pull-right[
+
+```{r,echo=FALSE}
+ggplot(sf_sl_0) +
+  geom_sf(fill='beige') +
+ggspatial::annotation_north_arrow(location = "br")+
+  ggspatial::annotation_scale(location = "bl")
+```
+
+]
 
 
 ---
@@ -431,6 +498,15 @@ ggplot(oz_states) +
 
 ---
 
+```{r, echo=TRUE}
+ggplot(oz_states) + 
+  geom_sf() + 
+  coord_sf()
+```
+
+
+---
+
 ## `coord_sf()`
 
 - ensures that every layer in the plot uses the same projection
@@ -439,6 +515,7 @@ ggplot(oz_states) +
 
 ## Mark following locations on the map
 
+.pull-left[
 ```{r}
 oz_capitals <- tibble::tribble( 
   ~city,           ~lat,     ~lon,
@@ -451,10 +528,150 @@ oz_capitals <- tibble::tribble(
   "Canberra",  -35.2809, 149.1300, 
   "Darwin",    -12.4634, 130.8456, 
 )
+
+```
+
+]
+
+.pull-right[
+
+```{r}
 oz_capitals
 ```
 
+]
+
 ---
+## Add other geoms
+
+.pull-left[
+
+```{r, eval=FALSE}
+ggplot() + 
+  geom_sf(data = oz_states, colour = "black", fill = NA) + 
+  geom_point(data = oz_capitals, mapping = aes(x = lon, y = lat), colour = "red") 
+```
+]
+
+.pull-right[
+
+```{r,echo=FALSE}
+ggplot() + 
+  geom_sf(data = oz_states, colour = "black", fill = NA) + 
+  geom_point(data = oz_capitals, mapping = aes(x = lon, y = lat), colour = "red") 
+```
+
+]
+
+---
+
+## Add other geoms
+
+.pull-left[
+
+```{r, eval=FALSE}
+ggplot() + 
+  geom_sf(data = oz_states, colour = "black", fill = NA) + 
+  geom_point(data = oz_capitals, mapping = aes(x = lon, y = lat), colour = "red") + coord_sf()
+```
+]
+
+.pull-right[
+
+```{r,echo=FALSE}
+ggplot() + 
+  geom_sf(data = oz_states, colour = "black", fill = NA) + 
+  geom_point(data = oz_capitals, mapping = aes(x = lon, y = lat), colour = "red") + coord_sf()
+```
+
+]
+
+---
+Your turn: Draw the electoral boundaries
+
+```{r}
+oz_votes <- rmapshaper::ms_simplify(ozmaps::abs_ced)
+```
+
+---
+
+```{r}
+library(ggplot2)
+library(sf)
+nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+point <- data.frame(id = "hi", lat = 36, long = -80) # point inside NC
+nc
+```
+
+---
+.pull-left[
+
+## Data
+
+```{r}
+ggplot() +
+  geom_sf(data = nc) +
+  coord_sf(crs = st_crs(3347))
+```
+
+]
+
+.pull-right[
+
+## Points
+
+```{r}
+ggplot() +
+  geom_sf(data = nc) +
+  geom_point(data = point, aes(x = long, y = lat))
+```
+
+]
+
+---
+## Data and Points
+
+```{r}
+ggplot() +
+  geom_sf(data = nc) +
+  geom_point(data = point, aes(x = long, y = lat)) +
+  coord_sf(crs = st_crs(3347))
+```
+
+---
+
+EPSG:3347
+
+NAD83 / Statistics Canada Lambert
+
+**Coordinate Reference System Formats: Three common formats include.**
+
+- proj.4
+
+- EPSG
+
+- Well-known Text (WKT) formats.
+---
+
+```{r}
+point <- st_as_sf(point, coords = c("long", "lat"), crs = 4326)
+
+ggplot() +
+  geom_sf(data = nc) +
+  geom_sf(data = point) +
+  coord_sf(crs = st_crs(3347))
+```
+
+`coord_sf` knows what to transform from
+
+---
+class: center, middle
+
+`coord_sf` can convert layers to common projections but they need to be sf objects for it to know how to do so.
+
+
+---
+
 ## Projecting your data
 
 ```{r}
@@ -535,10 +752,11 @@ C
 
 
 
-```{r,eval=FALSE}
+```{r,eval=FALSE,warning=FALSE, message=FALSE}
 #remotes::install_github("ropensci/USAboundaries")
 #install.packages("USAboundariesData", repos = "https://ropensci.r-universe.dev", type = "source")
 library(USAboundaries)
+library(tidyverse)
 crs_use <- "+proj=laea +lat_0=30 +lon_0=-95"
 
 usa_sf <- us_boundaries(type="state", resolution = "low") %>% 
@@ -559,11 +777,21 @@ D <- ggplot(data = usa_sf) +
 
 ---
 
+```{r}
+D
+```
 
-
+---
 `st_as_sf()`: what coordinate system do the coordinates you just gave me use?
 
 `st_transform()`: what coordinate system should I transform those coordinates into?
+
+**Analogy:** if you were translating a book, 
+
+the crs in `st_as_sf()` is "what language is the book written in?" 
+
+`st_transform()` is "what language am I translating this to?"
+
 
 ---
 
@@ -574,17 +802,67 @@ D <- ggplot(data = usa_sf) +
 - WGS84 and EPSG:4326 are geographic CRS. 
 
 - It means that they use latitude and longitude coordinates to specify a location on the surface of the earth.
----
 
-```{r}
-D
-```
+
 
 ---
 
 ## Projecting your data
 
+**Additional reading**
+
 Click [here](https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-to-coordinate-reference-systems/)
+
+---
+
+## Interactive chart
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(sf)
+library(viridis)
+#devtools::install_github("tylermorganwall/rayshader")
+library(rayshader)
+
+sightings = st_read(dsn = "~/Dropbox/R Code Repository/Sasquatch/WA_OR_Bigfoot.shp")
+sightings = mutate(sightings, Sightings = Join_Count)
+
+outputFile <- file.path("~/Dropbox/R Code Repository/Sasquatch/", "sasquatch_sightings.mp4")
+
+
+```
+
+Resources: https://geospatialtraining.com/3d-mapping-of-sasquatch-sightings-in-r-with-rayshader/
+---
+
+```{r, eval=FALSE}
+sightings
+```
+
+---
+
+```{r, eval=FALSE}
+ggSightings <- ggplot(data = sightings) + 
+  geom_sf(aes(fill = Sightings)) + 
+  scale_fill_viridis("Sightings") +
+  ggtitle("Sasquatch Sightings - Washington and Oregon") +
+  theme_bw()
+```
+
+---
+
+```{r, eval=FALSE}
+ggSightings
+```
+
+---
+
+```{r, eval=FALSE}
+plot_gg(ggSightings,multicore=TRUE,width=5,height=5,scale=250,windowsize=c(1400,866),
+        zoom = 0.55, phi = 30)
+render_snapshot()
+render_movie(filename = outputFile)
+```
 
 
 ---
@@ -634,7 +912,8 @@ ggplot() +
 Visit here: https://tstdataviz.netlify.app/slides/spatiotemporal.html
 ---
 
-# What is next?
+
+# Moving forward
 
 ### Visualizing using webmaps
 
