@@ -385,12 +385,118 @@ district
 
 ---
 
+.pull-left[
+
+Province
+
+
+```r
+ggplot(data=province) +
+  geom_sf()
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+District
+
+
+```r
+ggplot(data=district) +
+  geom_sf()
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+
+]
+
+---
+
+
+
+
+
+```r
+province
+```
+
+```
+## Simple feature collection with 9 features and 3 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 362203.3 ymin: 380301.9 xmax: 621918.1 ymax: 813560.9
+## Projected CRS: SLD99 / Sri Lanka Grid 1999
+## # A tibble: 9 × 4
+##                                              geometry PROVINCE Status population
+## *                                  &lt;MULTIPOLYGON [m]&gt; &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;
+## 1 (((498211.2 611042.6, 498401.7 610897.1, 498415.9 … CENTRAL  Provi…    2781000
+## 2 (((609877 559315.9, 609857.5 559313, 609845.2 5593… EASTERN  Provi…    1746000
+## 3 (((501928.5 712099.6, 501970.4 712098.8, 502020 71… NORTH C… Provi…    1386000
+## 4 (((393087.5 629959, 393098.1 629956.7, 393103.2 62… NORTH W… Provi…    2563000
+## 5 (((405858.7 700083.7, 405855.3 700082, 405851.5 70… NORTHERN Provi…    1152000
+## 6 (((432117.3 521875.5, 432083.5 521852.9, 432041.7 … SABARAG… Provi…    2070000
+## 7 (((481925.5 381353.7, 481922.9 381350.3, 481919 38… SOUTHERN Provi…    2669000
+## 8 (((522825 568220.9, 522872.6 568217.7, 522926.1 56… UVA      Provi…    1387000
+## 9 (((411888.2 438189.4, 411886.4 438182.3, 411881.7 … WESTERN  Provi…    6165000
+```
+
+---
+
+
+```r
+district
+```
+
+```
+## Simple feature collection with 26 features and 3 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 362203.3 ymin: 380301.9 xmax: 621918.1 ymax: 813560.9
+## Projected CRS: SLD99 / Sri Lanka Grid 1999
+## # A tibble: 26 × 4
+##                                              geometry DISTRICT Status population
+##  *                                 &lt;MULTIPOLYGON [m]&gt; &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;
+##  1 (((392952.6 594064.2, 392985.8 593971.5, 392986.2… [UNKNOW… &lt;NA&gt;           NA
+##  2 (((551311.8 581603.6, 551324.5 581599.7, 551334.5… AMPARA   Distr…     736000
+##  3 (((501928.5 712099.6, 501970.4 712098.8, 502020 7… ANURADH… Distr…     943000
+##  4 (((522825 568220.9, 522872.6 568217.7, 522926.1 5… BADULLA  Distr…     886000
+##  5 (((609877 559315.9, 609857.5 559313, 609845.2 559… BATTICA… Distr…     579000
+##  6 (((400911.5 497888.4, 401032.5 497869.3, 401035.2… COLOMBO  Distr…    2455000
+##  7 (((425038.8 404072.5, 425030.7 404072.5, 425022 4… GALLE    Distr…    1135000
+##  8 (((430775.7 534473.9, 430789.2 534441.8, 430790.2… GAMPAHA  Distr…    2423000
+##  9 (((592923.3 452679, 592949.2 452679, 592989.8 452… HAMBANT… Distr…     668000
+## 10 (((362968.6 763698.5, 362883.6 763686.9, 362787.9… JAFFNA   Distr…     621000
+## # ℹ 16 more rows
+```
+
+
+---
+
+## Guess the output.
+
+
+```r
+ggplot() +
+  geom_sf(data=province, lwd=2, col="black") + 
+  geom_sf(data=district, linetype=21, col="red")
+```
+
+---
+
 ## Your turn:
 
 Colour provinces according to the population.
 
+
 ---
 
+## Annotations
+
+.pull-left[
 
 ```r
 ggplot(sf_sl_0) +
@@ -399,8 +505,13 @@ ggspatial::annotation_north_arrow(location = "br")+
   ggspatial::annotation_scale(location = "bl")
 ```
 
-![](sp_viz_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+]
 
+.pull-right[
+
+![](sp_viz_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+]
 
 
 ---
@@ -551,7 +662,19 @@ oz_states
 ---
 ## Obtain the following map
 
-![](sp_viz_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+![](sp_viz_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+ggplot(oz_states) + 
+  geom_sf() + 
+  coord_sf()
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+
 
 ---
 
@@ -563,6 +686,7 @@ oz_states
 
 ## Mark following locations on the map
 
+.pull-left[
 
 ```r
 oz_capitals &lt;- tibble::tribble( 
@@ -576,6 +700,14 @@ oz_capitals &lt;- tibble::tribble(
   "Canberra",  -35.2809, 149.1300, 
   "Darwin",    -12.4634, 130.8456, 
 )
+```
+
+]
+
+.pull-right[
+
+
+```r
 oz_capitals
 ```
 
@@ -593,7 +725,178 @@ oz_capitals
 ## 8 Darwin    -12.5  131.
 ```
 
+]
+
 ---
+## Add other geoms
+
+.pull-left[
+
+
+```r
+ggplot() + 
+  geom_sf(data = oz_states, colour = "black", fill = NA) + 
+  geom_point(data = oz_capitals, mapping = aes(x = lon, y = lat), colour = "red") 
+```
+]
+
+.pull-right[
+
+![](sp_viz_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+## Add other geoms
+
+.pull-left[
+
+
+```r
+ggplot() + 
+  geom_sf(data = oz_states, colour = "black", fill = NA) + 
+  geom_point(data = oz_capitals, mapping = aes(x = lon, y = lat), colour = "red") + coord_sf()
+```
+]
+
+.pull-right[
+
+![](sp_viz_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+
+]
+
+---
+Your turn: Draw the electoral boundaries
+
+
+```r
+oz_votes &lt;- rmapshaper::ms_simplify(ozmaps::abs_ced)
+```
+
+---
+
+
+```r
+library(ggplot2)
+library(sf)
+nc &lt;- sf::st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+point &lt;- data.frame(id = "hi", lat = 36, long = -80) # point inside NC
+nc
+```
+
+```
+## Simple feature collection with 100 features and 14 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+## Geodetic CRS:  NAD27
+## First 10 features:
+##     AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
+## 1  0.114     1.442  1825    1825        Ashe 37009  37009        5  1091     1
+## 2  0.061     1.231  1827    1827   Alleghany 37005  37005        3   487     0
+## 3  0.143     1.630  1828    1828       Surry 37171  37171       86  3188     5
+## 4  0.070     2.968  1831    1831   Currituck 37053  37053       27   508     1
+## 5  0.153     2.206  1832    1832 Northampton 37131  37131       66  1421     9
+## 6  0.097     1.670  1833    1833    Hertford 37091  37091       46  1452     7
+## 7  0.062     1.547  1834    1834      Camden 37029  37029       15   286     0
+## 8  0.091     1.284  1835    1835       Gates 37073  37073       37   420     0
+## 9  0.118     1.421  1836    1836      Warren 37185  37185       93   968     4
+## 10 0.124     1.428  1837    1837      Stokes 37169  37169       85  1612     1
+##    NWBIR74 BIR79 SID79 NWBIR79                       geometry
+## 1       10  1364     0      19 MULTIPOLYGON (((-81.47276 3...
+## 2       10   542     3      12 MULTIPOLYGON (((-81.23989 3...
+## 3      208  3616     6     260 MULTIPOLYGON (((-80.45634 3...
+## 4      123   830     2     145 MULTIPOLYGON (((-76.00897 3...
+## 5     1066  1606     3    1197 MULTIPOLYGON (((-77.21767 3...
+## 6      954  1838     5    1237 MULTIPOLYGON (((-76.74506 3...
+## 7      115   350     2     139 MULTIPOLYGON (((-76.00897 3...
+## 8      254   594     2     371 MULTIPOLYGON (((-76.56251 3...
+## 9      748  1190     2     844 MULTIPOLYGON (((-78.30876 3...
+## 10     160  2038     5     176 MULTIPOLYGON (((-80.02567 3...
+```
+
+---
+.pull-left[
+
+## Data
+
+
+```r
+ggplot() +
+  geom_sf(data = nc) +
+  coord_sf(crs = st_crs(3347))
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+## Points
+
+
+```r
+ggplot() +
+  geom_sf(data = nc) +
+  geom_point(data = point, aes(x = long, y = lat))
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+
+]
+
+---
+## Data and Points
+
+
+```r
+ggplot() +
+  geom_sf(data = nc) +
+  geom_point(data = point, aes(x = long, y = lat)) +
+  coord_sf(crs = st_crs(3347))
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+
+---
+
+EPSG:3347
+
+NAD83 / Statistics Canada Lambert
+
+**Coordinate Reference System Formats: Three common formats include.**
+
+- proj.4
+
+- EPSG
+
+- Well-known Text (WKT) formats.
+---
+
+
+```r
+point &lt;- st_as_sf(point, coords = c("long", "lat"), crs = 4326)
+
+ggplot() +
+  geom_sf(data = nc) +
+  geom_sf(data = point) +
+  coord_sf(crs = st_crs(3347))
+```
+
+![](sp_viz_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+
+`coord_sf` knows what to transform from
+
+---
+class: center, middle
+
+`coord_sf` can convert layers to common projections but they need to be sf objects for it to know how to do so.
+
+
+---
+
 ## Projecting your data
 
 
@@ -659,7 +962,7 @@ A
 ## old-style crs object detected; please recreate object with a recent sf::st_crs()
 ```
 
-![](sp_viz_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+![](sp_viz_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -686,7 +989,7 @@ B
 ## old-style crs object detected; please recreate object with a recent sf::st_crs()
 ```
 
-![](sp_viz_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+![](sp_viz_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -713,7 +1016,7 @@ C
 ## old-style crs object detected; please recreate object with a recent sf::st_crs()
 ```
 
-![](sp_viz_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+![](sp_viz_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -724,6 +1027,7 @@ C
 #remotes::install_github("ropensci/USAboundaries")
 #install.packages("USAboundariesData", repos = "https://ropensci.r-universe.dev", type = "source")
 library(USAboundaries)
+library(tidyverse)
 crs_use &lt;- "+proj=laea +lat_0=30 +lon_0=-95"
 
 usa_sf &lt;- us_boundaries(type="state", resolution = "low") %&gt;% 
@@ -745,10 +1049,28 @@ D &lt;- ggplot(data = usa_sf) +
 ---
 
 
+```r
+D
+```
 
+```
+## function (expr, name) 
+## .External(C_doD, expr, name)
+## &lt;bytecode: 0x7f9c0785f8c8&gt;
+## &lt;environment: namespace:stats&gt;
+```
+
+---
 `st_as_sf()`: what coordinate system do the coordinates you just gave me use?
 
 `st_transform()`: what coordinate system should I transform those coordinates into?
+
+**Analogy:** if you were translating a book, 
+
+the crs in `st_as_sf()` is "what language is the book written in?" 
+
+`st_transform()` is "what language am I translating this to?"
+
 
 ---
 
@@ -759,23 +1081,14 @@ D &lt;- ggplot(data = usa_sf) +
 - WGS84 and EPSG:4326 are geographic CRS. 
 
 - It means that they use latitude and longitude coordinates to specify a location on the surface of the earth.
----
 
 
-```r
-D
-```
-
-```
-## function (expr, name) 
-## .External(C_doD, expr, name)
-## &lt;bytecode: 0x7fca5472fe70&gt;
-## &lt;environment: namespace:stats&gt;
-```
 
 ---
 
 ## Projecting your data
+
+**Additional reading**
 
 Click [here](https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-to-coordinate-reference-systems/)
 
@@ -881,7 +1194,7 @@ ggplot() +
   geom_point(data = statepop2, mapping = aes(x = long, y = lat, group = group), fill = "grey", color = "black") 
 ```
 
-![](sp_viz_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+![](sp_viz_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -891,7 +1204,7 @@ ggplot() +
   geom_polygon(data = statepop2, mapping = aes(x = long, y = lat, group = group),fill = "grey", color = "black") 
 ```
 
-![](sp_viz_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+![](sp_viz_files/figure-html/unnamed-chunk-52-1.png)&lt;!-- --&gt;
 
 ---
 

@@ -71,6 +71,8 @@ In-class Assignment 1
 
 
 
-📊 Week 11: Spatial Visualization
+📊 Week 11/12: Spatial Visualization
 
-[Plot maps](/slides/sp_viz.html))
+[Plot maps](/slides/sp_viz.html)
+
+[Interactive plots]()
